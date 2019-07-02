@@ -7061,6 +7061,50 @@ module.exports = {"data":{"site":{"siteMetadata":{"title":"NAVASARDI ART STUDIO"
 
 /***/ }),
 
+/***/ "./src/components/animated.js":
+/*!************************************!*\
+  !*** ./src/components/animated.js ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es6_object_assign__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es6.object.assign */ "core-js/modules/es6.object.assign");
+/* harmony import */ var core_js_modules_es6_object_assign__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_object_assign__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+var Animated = function Animated(props) {
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_1__["useState"](props.from),
+      animatedProps = _React$useState[0],
+      setAnimatedProps = _React$useState[1];
+
+  react__WEBPACK_IMPORTED_MODULE_1__["useEffect"](function () {
+    if (props.reset) {
+      setAnimatedProps(props.from);
+    }
+
+    var timer = setTimeout(function () {
+      requestAnimationFrame(function () {
+        return setAnimatedProps(Object.assign({}, props.inverse ? props.from : props.to, {
+          transition: (props.transitionProperty || "all") + " ." + (props.duration || 700 / 100) + "s  cubic-bezier(.19,1,.21,1) "
+        }));
+      });
+    }, props.delay || 0);
+    return function () {
+      return clearTimeout(timer);
+    };
+  }, [props.reset, props.inverse]);
+  return props.children(animatedProps);
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Animated);
+
+/***/ }),
+
 /***/ "./src/components/defaults/image.js":
 /*!******************************************!*\
   !*** ./src/components/defaults/image.js ***!
@@ -7185,36 +7229,151 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _style_home_home_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../style/home/home.scss */ "./src/style/home/home.scss");
 /* harmony import */ var _style_home_home_scss__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_style_home_home_scss__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _animated__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../animated */ "./src/components/animated.js");
+/* harmony import */ var assert__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! assert */ "assert");
+/* harmony import */ var assert__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(assert__WEBPACK_IMPORTED_MODULE_4__);
 
 
 
 
-var Header = function Header(_ref) {
-  var siteTitle = _ref.siteTitle;
-  return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("aside", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("nav", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(gatsby__WEBPACK_IMPORTED_MODULE_0__["Link"], {
-    to: "/",
-    activeClassName: "active"
-  }, "Home")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(gatsby__WEBPACK_IMPORTED_MODULE_0__["Link"], {
-    activeClassName: "active",
-    to: "/works/"
-  }, "Art Works")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(gatsby__WEBPACK_IMPORTED_MODULE_0__["Link"], {
-    activeClassName: "active",
-    to: "/portfolio/"
-  }, "Comercial Portfolios")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(gatsby__WEBPACK_IMPORTED_MODULE_0__["Link"], {
-    activeClassName: "active",
-    to: "/studio/"
-  }, "studio")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
-    className: "social"
-  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "social-icons"
-  }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
-    className: "icon-facebook-logo"
-  }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
-    className: "icon-instagram-logo"
-  }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
-    className: "icon-black-back-closed-envelope-shape"
-  }))))));
-};
+
+
+class Header extends react__WEBPACK_IMPORTED_MODULE_1___default.a.Component {
+  constructor(props) {
+    super(props);
+    this.timeout = void 0;
+    this.timeout1 = void 0;
+
+    this.onResize = () => {
+      const isSmall = window.innerWidth <= 650;
+      this.setState(state => state.hamburger === isSmall ? null : {
+        hamburger: isSmall,
+        show: !isSmall
+      });
+    };
+
+    this.toggleMenu = e => {
+      this.toggleIcon();
+
+      if (this.state.show) {
+        this.setState({
+          open: !this.state.open
+        }, () => {
+          if (this.timeout) {
+            clearTimeout(this.timeout);
+          }
+
+          if (this.state.open) {
+            this.timeout = setTimeout(() => {
+              this.setState({
+                show: false,
+                open: false
+              });
+            }, 700);
+          }
+        });
+      } else {
+        this.setState({
+          show: true
+        });
+      }
+    };
+
+    this.toggleIcon = () => {
+      this.setState({
+        rotate: !this.state.rotate
+      });
+    };
+
+    this.onBlur = e => {
+      if (this.timeout1) {
+        clearTimeout(this.timeout1);
+      }
+
+      if (!this.state.rotate) {
+        return null;
+      } else {
+        this.timeout1 = setTimeout(() => {
+          this.toggleMenu(e);
+        }, 100);
+      }
+    };
+
+    this.state = {
+      show: false,
+      hamburger: false,
+      open: false,
+      rotate: null
+    };
+  }
+
+  componentDidMount() {
+    const isSmall = window.innerWidth <= 650;
+    this.setState({
+      hamburger: isSmall,
+      show: !isSmall
+    });
+    window.addEventListener("resize", this.onResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.onResize);
+    clearTimeout(this.timeout);
+    clearTimeout(this.timeout1);
+  }
+
+  render() {
+    const {
+      hamburger,
+      show,
+      open,
+      rotate
+    } = this.state;
+    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("aside", {
+      className: hamburger ? "hamburger" : ""
+    }, hamburger && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      onBlur: this.onBlur,
+      tabIndex: 1,
+      className: rotate ? "btnClicked" : "btnUnClicked",
+      onClick: this.toggleMenu
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+      className: rotate ? "icon-close" : "icon-menu"
+    })), show && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_animated__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      from: hamburger ? {
+        transform: "translateX(-100%)"
+      } : {},
+      to: hamburger ? {
+        transform: "translateX(0%)"
+      } : {},
+      inverse: open
+    }, style => react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("nav", {
+      style: hamburger ? style : {}
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(gatsby__WEBPACK_IMPORTED_MODULE_0__["Link"], {
+      to: "/",
+      activeClassName: "active"
+    }, "Home")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(gatsby__WEBPACK_IMPORTED_MODULE_0__["Link"], {
+      activeClassName: "active",
+      to: "/works/"
+    }, "Art Works")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(gatsby__WEBPACK_IMPORTED_MODULE_0__["Link"], {
+      activeClassName: "active",
+      to: "/portfolio/"
+    }, "Comercial Portfolios")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(gatsby__WEBPACK_IMPORTED_MODULE_0__["Link"], {
+      activeClassName: "active",
+      to: "/studio/"
+    }, "studio")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
+      className: "social"
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "social-icons"
+    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+      className: "icon-facebook-logo"
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+      className: "icon-instagram-logo"
+    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+      className: "icon-black-back-closed-envelope-shape"
+    })))))));
+  }
+
+}
 
 /* harmony default export */ __webpack_exports__["default"] = (Header);
 
@@ -7421,14 +7580,14 @@ var ContentMain = function ContentMain() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var Cards = [{
+const Cards = [{
   width: 710,
   image: "p1",
   text: "some Text",
   title: "title",
   date: "01.02.2019",
   heading: "My Art Works",
-  headText: "lorem Ipsum"
+  headText: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
 }, {
   width: 270,
   image: "pimg2",
@@ -7473,20 +7632,28 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var Card = function Card(props) {
-  var _props$data = props.data,
-      image = _props$data.image,
-      title = _props$data.title,
-      text = _props$data.text,
-      date = _props$data.date,
-      width = _props$data.width,
-      heading = _props$data.heading,
-      headText = _props$data.headText;
+const Card = props => {
+  const {
+    image,
+    title,
+    text,
+    date,
+    width,
+    heading,
+    headText
+  } = props.data;
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: heading ? "card-main flexed" : "card-main"
-  }, heading && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, heading), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, headText)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }, heading && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "wText",
     style: {
-      width: width + "px"
+      width: "37vw",
+      marginRight: "10%"
+    }
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, heading), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, headText)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    style: {
+      maxWidth: `${width}px`,
+      width: "40vw"
     }
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_defaults_image__WEBPACK_IMPORTED_MODULE_1__["default"], {
     image: image
@@ -7514,26 +7681,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
 
-var MiniView = function MiniView(props) {
-  var newArr = [props.data[0]];
-  react__WEBPACK_IMPORTED_MODULE_0__["useEffect"](function () {}, []);
+const MiniView = props => {
+  let newArr = [props.data[0]];
+  react__WEBPACK_IMPORTED_MODULE_0__["useEffect"](() => {}, []);
 
   if (props.data) {
-    var spans = Math.floor(props.data.length / 2);
+    const spans = Math.floor(props.data.length / 2);
 
-    for (var i = 0; i < spans; i++) {
+    for (let i = 0; i < spans; i++) {
       newArr.push(props.data[i + 2]);
     }
-
-    console.log(newArr);
   }
 
-  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, newArr.map(function (item, index) {
-    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", {
-      className: "miniView",
-      key: index
-    });
-  }));
+  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, newArr.map((item, index) => react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", {
+    className: "miniView",
+    key: index
+  })));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (MiniView);
@@ -8480,6 +8643,17 @@ var PortfolioPage = function PortfolioPage() {
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE__reach_router__;
+
+/***/ }),
+
+/***/ "assert":
+/*!*************************!*\
+  !*** external "assert" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("assert");
 
 /***/ }),
 
