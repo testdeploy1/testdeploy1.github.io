@@ -115,8 +115,8 @@ var plugins = [{
     "name": "gatsby-starter-default",
     "short_name": "starter",
     "start_url": "/",
-    "background_color": "#663399",
-    "theme_color": "#663399",
+    "background_color": "#39393B",
+    "theme_color": "#39393B",
     "display": "minimal-ui",
     "icon": "src/images/gatsby-icon.png"
   }
@@ -7035,7 +7035,7 @@ if (true) {
 /*! exports provided: data, default */
 /***/ (function(module) {
 
-module.exports = {"data":{"site":{"siteMetadata":{"title":"NAVASARDI ART STUDIO","description":"Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.","author":"Arsen Alkamyan"}}}};
+module.exports = {"data":{"site":{"siteMetadata":{"title":"NAVASARDI ART STUDIO","description":"Portfolio","author":"Arsen Alkamyan"}}}};
 
 /***/ }),
 
@@ -7224,158 +7224,279 @@ Layout.propTypes = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var gatsby__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! gatsby */ "./.cache/gatsby-browser-entry.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _style_home_home_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../style/home/home.scss */ "./src/style/home/home.scss");
-/* harmony import */ var _style_home_home_scss__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_style_home_home_scss__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _animated__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../animated */ "./src/components/animated.js");
-/* harmony import */ var assert__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! assert */ "assert");
-/* harmony import */ var assert__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(assert__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var gatsby__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gatsby */ "./.cache/gatsby-browser-entry.js");
+/* harmony import */ var _animated__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../animated */ "./src/components/animated.js");
+/* harmony import */ var _style_home_home_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../style/home/home.scss */ "./src/style/home/home.scss");
+/* harmony import */ var _style_home_home_scss__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_style_home_home_scss__WEBPACK_IMPORTED_MODULE_3__);
 
 
 
 
 
+var Leftsite = function Leftsite() {
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default.a.useState(false),
+      hamburger = _React$useState[0],
+      setHamburger = _React$useState[1];
 
-class Header extends react__WEBPACK_IMPORTED_MODULE_1___default.a.Component {
-  constructor(props) {
-    super(props);
-    this.timeout = void 0;
-    this.timeout1 = void 0;
+  var _React$useState2 = react__WEBPACK_IMPORTED_MODULE_0___default.a.useState(false),
+      show = _React$useState2[0],
+      setShow = _React$useState2[1];
 
-    this.onResize = () => {
-      const isSmall = window.innerWidth <= 650;
-      this.setState(state => state.hamburger === isSmall ? null : {
-        hamburger: isSmall,
-        show: !isSmall
-      });
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0___default.a.useState(false),
+      open = _React$useState3[0],
+      setOpen = _React$useState3[1];
+
+  var _React$useState4 = react__WEBPACK_IMPORTED_MODULE_0___default.a.useState(null),
+      rotate = _React$useState4[0],
+      setRotate = _React$useState4[1];
+
+  react__WEBPACK_IMPORTED_MODULE_0___default.a.useEffect(function () {
+    var isSmall = window.innerWidth <= 650;
+    setHamburger(isSmall);
+    setShow(!isSmall);
+    window.addEventListener("resize", onResize);
+  }, []);
+  react__WEBPACK_IMPORTED_MODULE_0___default.a.useEffect(function () {
+    var timeout;
+
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+
+    if (open) {
+      timeout = setTimeout(function () {
+        setShow(false);
+        setOpen(false);
+      }, 700);
+    }
+
+    return function () {
+      clearTimeout(timeout);
     };
+  }, [open]);
 
-    this.toggleMenu = e => {
-      this.toggleIcon();
+  var onResize = function onResize() {
+    var isSmall = window.innerWidth <= 650;
 
-      if (this.state.show) {
-        this.setState({
-          open: !this.state.open
-        }, () => {
-          if (this.timeout) {
-            clearTimeout(this.timeout);
-          }
+    if (!hamburger) {
+      setHamburger(isSmall);
+      setShow(!isSmall);
+      setRotate(false);
+    }
+  };
 
-          if (this.state.open) {
-            this.timeout = setTimeout(() => {
-              this.setState({
-                show: false,
-                open: false
-              });
-            }, 700);
-          }
-        });
-      } else {
-        this.setState({
-          show: true
-        });
+  var toggleMenu = function toggleMenu(e) {
+    toggleIcon();
+
+    if (show) {
+      setOpen(!open);
+    } else {
+      setShow(true);
+    }
+  };
+
+  var toggleIcon = function toggleIcon() {
+    setRotate(!rotate);
+  };
+
+  var onBlur = function onBlur(e) {
+    if (e.relatedTarget && e.target) if (e.relatedTarget.tabIndex !== e.target.tabIndex) {
+      if (rotate) {
+        toggleMenu(e);
       }
-    };
+    }
+  };
 
-    this.toggleIcon = () => {
-      this.setState({
-        rotate: !this.state.rotate
-      });
-    };
-
-    this.onBlur = e => {
-      if (this.timeout1) {
-        clearTimeout(this.timeout1);
-      }
-
-      if (!this.state.rotate) {
-        return null;
-      } else {
-        this.timeout1 = setTimeout(() => {
-          this.toggleMenu(e);
-        }, 100);
-      }
-    };
-
-    this.state = {
-      show: false,
-      hamburger: false,
-      open: false,
-      rotate: null
-    };
-  }
-
-  componentDidMount() {
-    const isSmall = window.innerWidth <= 650;
-    this.setState({
-      hamburger: isSmall,
-      show: !isSmall
-    });
-    window.addEventListener("resize", this.onResize);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.onResize);
-    clearTimeout(this.timeout);
-    clearTimeout(this.timeout1);
-  }
-
-  render() {
-    const {
-      hamburger,
-      show,
-      open,
-      rotate
-    } = this.state;
-    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("aside", {
-      className: hamburger ? "hamburger" : ""
-    }, hamburger && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-      onBlur: this.onBlur,
-      tabIndex: 1,
-      className: rotate ? "btnClicked" : "btnUnClicked",
-      onClick: this.toggleMenu
-    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
-      className: rotate ? "icon-close" : "icon-menu"
-    })), show && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_animated__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      from: hamburger ? {
-        transform: "translateX(-100%)"
-      } : {},
-      to: hamburger ? {
-        transform: "translateX(0%)"
-      } : {},
-      inverse: open
-    }, style => react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("nav", {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("aside", {
+    onBlur: onBlur,
+    tabIndex: 1,
+    className: hamburger ? "hamburger" : ""
+  }, hamburger && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    tabIndex: 1,
+    className: rotate ? "btnClicked" : "btnUnClicked",
+    onClick: toggleMenu
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    className: rotate ? "icon-close" : "icon-menu"
+  })), show && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_animated__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    from: hamburger ? {
+      transform: "translateX(-100%)"
+    } : {},
+    to: hamburger ? {
+      transform: "translateX(0%)"
+    } : {},
+    inverse: open
+  }, function (style) {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", {
       style: hamburger ? style : {}
-    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(gatsby__WEBPACK_IMPORTED_MODULE_0__["Link"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(gatsby__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+      tabIndex: 1,
       to: "/",
       activeClassName: "active"
-    }, "Home")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(gatsby__WEBPACK_IMPORTED_MODULE_0__["Link"], {
+    }, "Home")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(gatsby__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+      tabIndex: 1,
       activeClassName: "active",
       to: "/works/"
-    }, "Art Works")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(gatsby__WEBPACK_IMPORTED_MODULE_0__["Link"], {
+    }, "Art Works")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(gatsby__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+      tabIndex: 1,
       activeClassName: "active",
       to: "/portfolio/"
-    }, "Comercial Portfolios")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(gatsby__WEBPACK_IMPORTED_MODULE_0__["Link"], {
+    }, "Comercial Portfolios")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(gatsby__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+      tabIndex: 1,
       activeClassName: "active",
       to: "/studio/"
-    }, "studio")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
+    }, "Studio")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
       className: "social"
-    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "social-icons"
-    }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
       className: "icon-facebook-logo"
-    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
       className: "icon-instagram-logo"
-    }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
       className: "icon-black-back-closed-envelope-shape"
-    })))))));
-  }
+    })))));
+  }));
+};
 
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Header);
+/* harmony default export */ __webpack_exports__["default"] = (Leftsite); // class Header extends React.Component {
+//   constructor(props) {
+//     super(props)
+//     this.state = {
+//       show: false,
+//       hamburger: false,
+//       open: false,
+//       rotate: null
+//     }
+//   }
+//   timeout;
+//   onResize = () => {
+//     const isSmall = window.innerWidth <= 650;
+//     this.setState(state => state.hamburger === isSmall ? null : {
+//       hamburger: isSmall,
+//       show: !isSmall,
+//       rotate: false
+//     }
+//     )
+//   }
+//   toggleMenu = (e) => {
+//     this.toggleIcon();
+//     if (this.state.show) {
+//       this.setState({
+//         open: !this.state.open
+//       }, () => {
+//         if (this.timeout) {
+//           clearTimeout(this.timeout)
+//         }
+//         if (this.state.open) {
+//           this.timeout = setTimeout(() => {
+//             this.setState({
+//               show: false,
+//               open: false
+//             })
+//           }, 700);
+//         }
+//       })
+//     } else {
+//       this.setState({
+//         show: true
+//       })
+//     }
+//   }
+//   componentDidMount() {
+//     const isSmall = window.innerWidth <= 650;
+//     this.setState({
+//       hamburger: isSmall,
+//       show: !isSmall
+//     })
+//     window.addEventListener("resize", this.onResize)
+//   }
+//   toggleIcon = () => {
+//     this.setState({
+//       rotate: !this.state.rotate
+//     })
+//   }
+//   onBlur = (e) => {
+//     if (e.relatedTarget.tabIndex !== e.target.tabIndex) {
+//       if (!this.state.rotate) {
+//         return null
+//       } else {
+//         this.toggleMenu(e)
+//       }
+//     }
+//   }
+//   componentWillUnmount() {
+//     window.removeEventListener("resize", this.onResize);
+//     clearTimeout(this.timeout);
+//   }
+//   render() {
+//     const { hamburger, show, open, rotate } = this.state;
+//     return (
+//       <aside onBlur={this.onBlur} tabIndex={1} className={hamburger ? "hamburger" : ""}>
+//         {hamburger && <button tabIndex={1} className={rotate ? "btnClicked" : "btnUnClicked"} onClick={this.toggleMenu}><i className={rotate ? "icon-close" : "icon-menu"} /></button>}
+//         {
+//           show && <Animated
+//             from={hamburger ? { transform: "translateX(-100%)" } : {}}
+//             to={hamburger ? { transform: "translateX(0%)" } : {}}
+//             inverse={open}
+//           >
+//             {
+//               style => <nav style={hamburger ? style : {}}>
+//                 <ul>
+//                   <li>
+//                     <Link
+//                       tabIndex={1}
+//                       to="/"
+//                       activeClassName="active"
+//                     >
+//                       Home
+//                           </Link>
+//                   </li>
+//                   <li>
+//                     <Link
+//                       tabIndex={1}
+//                       activeClassName="active"
+//                       to="/works/"
+//                     >
+//                       Art Works
+//                           </Link>
+//                   </li>
+//                   <li>
+//                     <Link
+//                       tabIndex={1}
+//                       activeClassName="active"
+//                       to="/portfolio/"
+//                     >
+//                       Comercial Portfolios
+//                           </Link>
+//                   </li>
+//                   <li>
+//                     <Link
+//                       tabIndex={1}
+//                       activeClassName="active"
+//                       to="/studio/"
+//                     >
+//                       Studio
+//                           </Link>
+//                   </li>
+//                   <li className="social">
+//                     <div className="social-icons">
+//                       <i className="icon-facebook-logo"></i>
+//                       <i className="icon-instagram-logo"></i>
+//                       <i className="icon-black-back-closed-envelope-shape"></i>
+//                     </div>
+//                   </li>
+//                 </ul>
+//               </nav>
+//             }
+//           </Animated>
+//         }
+//       </aside>
+//     );
+//   }
+// }
+// export default Header;
 
 /***/ }),
 
@@ -7632,16 +7753,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const Card = props => {
-  const {
-    image,
-    title,
-    text,
-    date,
-    width,
-    heading,
-    headText
-  } = props.data;
+var Card = function Card(props) {
+  var _props$data = props.data,
+      image = _props$data.image,
+      title = _props$data.title,
+      text = _props$data.text,
+      date = _props$data.date,
+      width = _props$data.width,
+      heading = _props$data.heading,
+      headText = _props$data.headText;
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: heading ? "card-main flexed" : "card-main"
   }, heading && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -7651,8 +7771,9 @@ const Card = props => {
       marginRight: "10%"
     }
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, heading), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, headText)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "slider-images",
     style: {
-      maxWidth: `${width}px`,
+      maxWidth: width + "px",
       width: "40vw"
     }
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_defaults_image__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -7679,25 +7800,30 @@ const Card = props => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _animated__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../animated */ "./src/components/animated.js");
 
 
-const MiniView = props => {
-  let newArr = [props.data[0]];
-  react__WEBPACK_IMPORTED_MODULE_0__["useEffect"](() => {}, []);
 
-  if (props.data) {
-    const spans = Math.floor(props.data.length / 2);
+function MiniView(props) {
+  var toImage = function toImage(e) {
+    props.toImage(e.currentTarget.id);
+  };
 
-    for (let i = 0; i < spans; i++) {
-      newArr.push(props.data[i + 2]);
-    }
-  }
+  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "mini-select"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "mini-line"
+  }), new Array(1, 2, 3).map(function (item, index) {
+    var _React$createElement;
 
-  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, newArr.map((item, index) => react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", {
-    className: "miniView",
-    key: index
-  })));
-};
+    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("span", (_React$createElement = {
+      key: index,
+      id: index,
+      onClick: toImage,
+      className: "miniView miniView" + index
+    }, _React$createElement["key"] = index, _React$createElement));
+  }));
+}
 
 /* harmony default export */ __webpack_exports__["default"] = (MiniView);
 
@@ -7730,7 +7856,7 @@ var Slider = function Slider(props) {
   var slider = react__WEBPACK_IMPORTED_MODULE_1__["useRef"]();
   var isDown = false;
   var startX;
-  var scrollLeft;
+  var scrollLeft; //const [line, setLine] = React.useState(0)
 
   var onMouseUp = function onMouseUp(event) {
     isDown = false;
@@ -7796,7 +7922,27 @@ var Slider = function Slider(props) {
     } else {
       requestAnimationFrame(function () {
         slider.current.style.marginLeft = scrollLeft + "px";
+        var percent = Math.ceil(-scrollLeft * 100 / rightLim);
+        document.querySelector(".mini-line").style.width = percent + "%";
       });
+    }
+  };
+
+  var toImage = function toImage(value) {
+    var parentWidth = slider.current.parentNode.getBoundingClientRect().width;
+    var sliderWidth = slider.current.getBoundingClientRect().width;
+    var rightLim = Math.ceil(sliderWidth - parentWidth);
+
+    if (+value === 1) {
+      slider.current.style.marginLeft = "-" + rightLim / 2 + "px"; //setLine(50)
+
+      document.querySelector(".mini-line").style.width = "50%";
+    } else if (+value === 2) {
+      slider.current.style.marginLeft = "-" + rightLim + "px";
+      document.querySelector(".mini-line").style.width = "100%"; //setLine(100)
+    } else {
+      slider.current.style.marginLeft = "0px";
+      document.querySelector(".mini-line").style.width = "0%"; //setLine(0)
     }
   };
 
@@ -7845,6 +7991,7 @@ var Slider = function Slider(props) {
   }))), react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", {
     className: "flex-between slider-pages"
   }, react__WEBPACK_IMPORTED_MODULE_1__["createElement"](_miniView__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    toImage: toImage,
     data: props.cards
   }), react__WEBPACK_IMPORTED_MODULE_1__["createElement"]("div", null, "scroll")));
 };
@@ -8046,7 +8193,7 @@ var StudioLayout = function StudioLayout(_ref) {
     loop: true,
     muted: true // controls={['PlayPause', 'Seek', 'Time', 'Volume', 'Fullscreen']}
     ,
-    controls: [],
+    controls: ['Volume'],
     poster: "http://sourceposter.jpg",
     onCanPlayThrough: function onCanPlayThrough() {// Do stuff
     }
@@ -8172,6 +8319,7 @@ var Year18 = function Year18() {
     className: "flex-between year18-album"
   }, images.map(function (item, index) {
     return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      key: index,
       className: "year18-images",
       style: {
         width: item.width
@@ -8643,17 +8791,6 @@ var PortfolioPage = function PortfolioPage() {
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE__reach_router__;
-
-/***/ }),
-
-/***/ "assert":
-/*!*************************!*\
-  !*** external "assert" ***!
-  \*************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require("assert");
 
 /***/ }),
 
